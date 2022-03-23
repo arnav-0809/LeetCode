@@ -14,7 +14,7 @@ class Solution {
     void solve(map<ll,set<ll>>&ans,TreeNode*root,ll ans1,ll l){
         if(root==NULL)
             return;
-        if(ans.find(l)==ans.end()){
+        if(ans.count(l) == 0){
             ans[l]={ans1};
         }else{
             ans[l].insert(ans1);
