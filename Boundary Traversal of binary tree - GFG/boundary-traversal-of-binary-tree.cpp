@@ -105,7 +105,7 @@ struct Node
 
 class Solution {
     bool isLeaf(Node*root){
-        return root && !root->left && !root->right;
+        return !root->left && !root->right;
     }
     
     void addLeft(Node*root,vector<int>&ans){
