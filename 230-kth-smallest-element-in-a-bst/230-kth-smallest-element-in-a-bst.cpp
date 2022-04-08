@@ -10,17 +10,20 @@
  * };
  */
 class Solution {
-    void sol(TreeNode*root,vector<int>&v){
+    void sol(TreeNode*root,int k,int &count,int&ans){
         if(root==NULL)
             return;
-        sol(root->left,v);
-        v.push_back(root->val);
-        sol(root->right,v);
+        sol(root->left,k,count,ans);
+        if(++count==k){
+            ans=root->val;
+            return;
+        }
+        sol(root->right,k,count,ans);
     }
 public:
     int kthSmallest(TreeNode* root, int k) {
-        vector<int>v;
-        sol(root,v);
-        return v[k-1];
+        int ans=0,count=0;
+        sol(root,k,count,ans);
+        return ans;
     }
 };
