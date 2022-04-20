@@ -10,30 +10,27 @@
  * };
  */
 class BSTIterator {
-    queue<int>ans;
-    void sol(TreeNode*r,queue<int>&ans){
+    stack<TreeNode*>ans;
+    void sol(TreeNode*r){
         if(r==NULL)
             return;
-        sol(r->left,ans);
-        ans.push(r->val);
-        sol(r->right,ans);
-        
+        ans.push(r);
+        sol(r->left);
     }
 public:
     BSTIterator(TreeNode* root) {
-        sol(root,ans);
+        sol(root);
     }
     
     int next() {
-        int f=ans.front();
+         TreeNode*f=ans.top();
         ans.pop();
-        return f;
+        sol(f->right);
+        return f->val;
     }
     
     bool hasNext() {
-        if(!ans.empty())
-            return true;
-        else return false;
+        return !ans.empty();
     }
 };
 
