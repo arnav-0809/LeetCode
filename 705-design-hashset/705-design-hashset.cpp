@@ -1,24 +1,29 @@
 class MyHashSet {
-    set<int>p;
+    vector<vector<int>>p;
 public:
     MyHashSet() {
+        p.resize(100);
     }
     
     void add(int key) {
-        p.insert(key);
+        int hash=key%100;
+        if(!contains(key))
+            p[hash].push_back(key);
     }
     
     void remove(int key) {
-        for(auto it=p.begin();it!=p.end();it++){
+        int hash=key%100;
+        for(auto it=p[hash].begin();it!=p[hash].end();it++){
             if(*it==key){
-                p.erase(it);
+                p[hash].erase(it);
                 break;
             }
         }
     }
     
     bool contains(int key) {
-        for(auto it:p){
+        int hash=key%100;
+        for(auto it:p[hash]){
             if(it==key){
                 return true;
             }
