@@ -3,19 +3,18 @@ public:
     int cherryPickup(vector<vector<int>>& grid) {
         int m = grid.size();
         int n = grid[0].size();
-        vector<vector<vector<int>>>dp(m, vector<vector<int>>(n, vector<int>(n, -1)));
-        
+        vector<vector<int>>prev(n, vector<int>(n, -1)), temp(n, vector<int>(n, -1));
         for(int i = 0; i < n ; i++)
         {
             for(int j = 0; j < n ; j++)
             {
                 if(i == j)
                 {
-                    dp[m-1][i][j] = grid[m-1][j];
+                    prev[i][j] = grid[m-1][j];
                 }
                 else
                 {
-                     dp[m-1][i][j] = grid[m-1][i] + grid[m-1][j];
+                     prev[i][j] = grid[m-1][i] + grid[m-1][j];
                 }
             }
         }
@@ -44,7 +43,7 @@ public:
                             
                             if(j1 + dj1 >= 0 && j1 + dj1 < n && j2 + dj2 >= 0 && j2 + dj2 < n)
                             {
-                                value += dp[i + 1][j1 + dj1][j2 + dj2];
+                                value += prev[j1 + dj1][j2 + dj2];
                             }
                             else
                             {
@@ -54,11 +53,12 @@ public:
                             maxi = max(maxi, value);
                         }
                     }
-                    dp[i][j1][j2] = maxi;
+                    temp[j1][j2] = maxi;
                 }
             }
+            prev = temp;
         }
  
-        return dp[0][0][n-1];
+        return prev[0][n-1];
     }
 };
