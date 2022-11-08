@@ -1,17 +1,25 @@
 class Solution {
 public:
     string makeGood(string s) {
-        int prev;
-        do{
-           prev=s.length();
-            int n=s.length();
-            for(int i = 0;i<n-1;i++){
-                if(s[i]-'a' == s[i+1]-'A' || s[i]-'A' == s[i+1]-'a' ){
-                    s.erase(i,2);
-                }
-            } 
+        stack<char>st,st1;
+        string ans="";
+        for(int i=0;i<s.length();i++){
+            if(!st.empty() && (s[i]-'a'==st.top()-'A' || s[i]-'A' == st.top()-'a')){
+                st.pop();
+                continue;
+            }
+            st.push(s[i]);
         }
-        while(s.length()<prev);
-        return s;
+        
+        while(!st.empty()){
+            st1.push(st.top());
+            st.pop();
+        }
+        
+        while(!st1.empty()){
+            ans+=st1.top();
+            st1.pop();
+        }
+        return ans;
     }
 };
