@@ -11,23 +11,24 @@
  */
 class Solution {
 public:
-    void sol(TreeNode* root, vector<int>& nodes){
+    TreeNode* prev;
+    void sol(TreeNode* root, int& mini){
         if(root == NULL){
             return;
         }
 
-        sol(root -> left, nodes);
-        nodes.push_back(root -> val);
-        sol(root -> right, nodes);
+        sol(root -> left, mini);
+        if(prev != NULL){
+            mini = min(mini, abs(root -> val - prev -> val));
+        }
+        prev = root;
+        sol(root -> right, mini);
     }
     
     int minDiffInBST(TreeNode* root) {
         vector<int> nodes;
-        sol(root, nodes);
-        int n = nodes.size(), mini = INT_MAX;;
-        for(int i = 1; i < n; i++){
-            mini = min(mini, abs(nodes[i] - nodes[i-1]));
-        }
+        int mini = INT_MAX;
+        sol(root, mini);
         return mini;
     }
 };
