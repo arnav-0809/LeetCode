@@ -12,25 +12,24 @@ public:
     
     int countWays(vector<vector<int>>& ranges) {
         sort(ranges.begin(), ranges.end());
-        int n = ranges.size();
-        vector<vector<int>> v;
-        v.push_back(ranges[0]);
+        int n = ranges.size(), m = 1;
+        int lastRange = ranges[0][1];
         for(int i = 1; i < n; i++)
         {
-            if(v.back()[1] >= ranges[i][0])
+            if(lastRange >= ranges[i][0])
             {
-                if(v.back()[1] < ranges[i][1])
+                if(lastRange < ranges[i][1])
                 {
-                    v.back()[1] = ranges[i][1];
+                    lastRange = ranges[i][1];
                 }
             }
             else
             {
-                v.push_back(ranges[i]);
+                m += 1;
+                lastRange = ranges[i][1];
             }
         }
-        int m = v.size();
-        v.clear();
+        
         return power(2, m);
     }
 };
