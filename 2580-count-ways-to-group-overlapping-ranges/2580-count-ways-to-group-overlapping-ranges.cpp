@@ -29,7 +29,8 @@ public:
                 v.push_back(ranges[i]);
             }
         }
-        
-        return power(2, v.size());
+        int m = v.size();
+        v.clear();
+        return power(2, m);
     }
 };
