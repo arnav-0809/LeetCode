@@ -1,9 +1,10 @@
 class Solution {
 public:
     int leastInterval(vector<char>& tasks, int n) {
-        priority_queue<int> pq;
         map<char, int> m;
         int len = tasks.size();
+        int maxi = INT_MIN;
+        int time = 0;
         for(int i = 0; i < len; i++)
         {
             m[tasks[i]] += 1;
@@ -11,39 +12,19 @@ public:
 
         for(auto it : m)
         {
-            pq.push(it.second);
+            maxi = max(maxi, it.second);
         }
 
-        m.clear();
-        int time = 0;
-        while(!pq.empty())
+        time = (maxi - 1) * (n + 1);
+        for(auto it : m)
         {
-            int cycle = n + 1;
-            vector<int> rem;
-            while(cycle && !pq.empty())
+            if(maxi == it.second)
             {
-                auto it = pq.top();
-                pq.pop();
-                if(it > 1)
-                {
-                    rem.push_back(it - 1);
-                }
-                cycle--;
                 time++;
             }
-
-            for(auto i : rem)
-            {
-                pq.push(i);
-            }
-
-            if(pq.empty())
-            {
-                break;
-            }
-            time += cycle;
         }
-        return time;
+
+        return max(time, len);
     }
     
 };
