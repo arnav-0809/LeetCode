@@ -1,39 +1,51 @@
 class Solution {
 public:
-    void dfs(int i, vector<int>& vis, vector<int> adj[])
+    void unionSet(int i, int j, vector<int>& parent, vector<int>& rank)
     {
-        vis[i] = 1;
-        for(auto it : adj[i])
+        int iPar = findParent(i, parent), jPar = findParent(j, parent);
+        if(rank[iPar] > rank[jPar])
         {
-            if(!vis[it])
-            {
-                dfs(it, vis, adj);
-            }
+            parent[jPar] = iPar;
+        }
+        else if(rank[jPar] < rank[iPar])
+        {
+            parent[iPar] = jPar;
+        }
+        else
+        {
+            parent[iPar] = jPar;
+            rank[jPar]++;
         }
     }
 
+    int findParent(int i, vector<int>& parent)
+    {
+        if(parent[i] != i)
+        {
+            parent[i] = findParent(parent[i], parent);
+        }
+        return parent[i];
+    }
+
     int makeConnected(int n, vector<vector<int>>& connections) {
-        int m = connections.size();
+        int m = connections.size(), ans = n;
         if(n > m + 1)
         {
             return -1;
         }
 
-        vector<int> adj[n];
-        for(auto it : connections)
-        {
-            adj[it[0]].push_back(it[1]);
-            adj[it[1]].push_back(it[0]);
-        }
-
-        vector<int> vis(n, 0);
-        int ans = 0;
+        vector<int> rank(n, 0), parent(n);
         for(int i = 0; i < n; i++)
         {
-            if(!vis[i])
+            parent[i] = i;
+        }
+
+        for(auto it : connections)
+        {
+            if(findParent(it[0], parent) != findParent(it[1], parent))
             {
-                ans++;
-                dfs(i, vis, adj);
+                ans -= 1;
+                unionSet(it[0], it[1], parent, rank);
             }
         }
         return ans - 1;
