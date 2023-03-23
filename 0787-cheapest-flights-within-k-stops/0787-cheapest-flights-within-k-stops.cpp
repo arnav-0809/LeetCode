@@ -22,7 +22,7 @@ public:
             for(auto it : adj[i])
             {
                 int x = it.first, prevD = it.second;
-                if(prevD + d < dist[x])
+                if(prevD + d < dist[x] && stops <= k)
                 {
                     dist[x] =  prevD + d;
                     q.push({stops + 1, {x, dist[x]}});
