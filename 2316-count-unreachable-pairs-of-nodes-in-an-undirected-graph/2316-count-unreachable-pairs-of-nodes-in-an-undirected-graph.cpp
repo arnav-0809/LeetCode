@@ -1,47 +1,59 @@
 class Solution {
 public:
-    void dfs(int i, vector<bool>& vis, vector<int> adj[], int& count)
+    int findParent(int i, vector<int>& parent)
     {
-        vis[i] = true;
-        count++;
-        for(auto it : adj[i])
+        if(parent[i] != i)
         {
-            if(!vis[it])
-            {
-                dfs(it, vis, adj, count);
-            }
+            parent[i] = findParent(parent[i], parent);
+        }
+        return parent[i];
+    }
+
+    void unionSet(int i, int j, vector<int>& parent, vector<int>& rank)
+    {
+        int iPar = findParent(i, parent), jPar = findParent(j, parent);
+        if(iPar == jPar)
+        {
+            return;
+        }
+        else if(rank[iPar] < rank[jPar])
+        {
+            parent[iPar] = jPar; 
+        }
+        else if(rank[iPar] > rank[jPar])
+        {
+            parent[jPar] = iPar;
+        }
+        else
+        {
+            parent[jPar] = iPar;
+            rank[iPar]++;
         }
     }
 
     long long countPairs(int n, vector<vector<int>>& edges) {
-        vector<int> adj[n];
-        for(auto it : edges)
-        {
-            adj[it[0]].push_back(it[1]);
-            adj[it[1]].push_back(it[0]);
-        }
-        vector<bool> vis(n, false);
-        vector<int> ans;
-        long long int totalCount = 0;
+        vector<int> parent(n), rank(n, 0);
         for(int i = 0; i < n; i++)
         {
-            if(!vis[i])
-            {
-                int count = 0;
-                dfs(i, vis, adj, count);
-                totalCount += count;
-                ans.push_back(count);
-            }
+            parent[i] = i;
+        }
+        for(auto it : edges)
+        {
+            unionSet(it[0], it[1], parent, rank);
         }
 
-        int m = ans.size();
-        long long int pairs = 0;
-        cout<<totalCount;
-        for(int i = 0; i < m; i++)
+        map<int, int> m;
+        for(int i = 0; i < n; i++)
         {
-            long long int x = ans[i];
-            pairs += (totalCount - x) * x;
+            m[findParent(i, parent)]++;
         }
-        return pairs / 2;
+        long long int pairs = 0, count = n;
+        for(auto it : m)
+        {
+            long long int size = it.second;
+            pairs += size * (count - size);
+            count -= size;
+        }
+        return pairs;
     }
 };
