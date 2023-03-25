@@ -20,7 +20,7 @@ class Solution {
             for(auto it : edges)
             {
                 int x = it[0], y = it[1], d = it[2];
-                if(dis[x] != INT_MAX && dis[x] + d < dis[y])
+                if(dis[x] != 1e8 && dis[x] + d < dis[y])
                 {
                     if(i == V)
                     {
